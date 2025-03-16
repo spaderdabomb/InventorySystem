@@ -1,13 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class BaseSlot : MonoBehaviour
+namespace InventorySystem
 {
-    public InventoryItem inventoryItem = null;
-
-    public void SetSlotItem(InventoryItem inventoryItem)
+    public class BaseSlot : MonoBehaviour
     {
-        this.inventoryItem = inventoryItem;
+        public InventoryItem inventoryItem = null;
+        public GameObject icon;
+        public GameObject quantityLabel;
+
+        private RawImage _iconImage;
+        private TextMeshProUGUI _quantityLabelText;
+
+        private void Start()
+        {
+            _iconImage = icon.GetComponent<RawImage>();
+            _quantityLabelText = quantityLabel.GetComponent<TextMeshProUGUI>();
+            SetItemUIState(false);
+        }
+
+        public void SetSlotItem(InventoryItem inventoryItem)
+        {
+            if (inventoryItem == null || inventoryItem?.quantity == 0)
+            {
+                ClearSlotItem();
+                return;
+            }
+
+            this.inventoryItem = inventoryItem;
+            _iconImage.texture = inventoryItem.baseItem.icon.texture;
+            _quantityLabelText.text = inventoryItem.quantity.ToString();
+            SetItemUIState(true);
+        }
+
+        private void ClearSlotItem()
+        {
+            inventoryItem = null;
+            SetItemUIState(false);
+        }
+
+        private void SetItemUIState(bool state)
+        {
+            icon.SetActive(state);
+            quantityLabel.SetActive(state);
+        }
     }
 }

@@ -4,10 +4,17 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "baseItem", menuName = "Items/BaseItem")]
-public class BaseItem : ScriptableObject
+namespace InventorySystem
 {
-    public string id = Guid.NewGuid().ToString();
-    public string description = string.Empty;
-    public int maxStack = 50;
+    [CreateAssetMenu(fileName = "baseItem", menuName = "Items/BaseItem")]
+    public class BaseItem : ScriptableObject
+    {
+        public string id = Guid.NewGuid().ToString();
+        public string displayName = string.Empty;
+        public string description = string.Empty;
+        public int maxStack = 50;
+
+        public Sprite icon;
+    }
+
 }

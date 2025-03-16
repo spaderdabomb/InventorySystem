@@ -89,9 +89,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f79e4e4a558a034cb235ff8183e284f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rows: 0
-  columns: 0
-  numSlots: 0
+  rows: 4
+  columns: 8
+  slotContainer: {fileID: 8467323720109512188}
+  baseSlotPrefab: {fileID: 4002973993165828337, guid: bfce3b23c1a8f9041ba8d1c90b4d4405,
+    type: 3}
 --- !u!1 &8467323720109512188
 GameObject:
   m_ObjectHideFlags: 0
