@@ -112,14 +112,51 @@ namespace InventorySystem
             return quantityRemaining;
         }
 
-        public void MoveItem()
-        {
-
-        }
-
         private void SetSlotItem(InventoryItem inventoryItem, int index)
         {
             slots[index].SetSlotItem(inventoryItem);
+        }
+
+        public void MoveItem(BaseSlot fromSlot, BaseSlot toSlot)
+        {
+            if (fromSlot.inventoryItem == null)
+                return;
+
+            InventoryItem movedItem = fromSlot.inventoryItem;
+            InventoryItem targetItem = toSlot.inventoryItem;
+
+            // If the target slot is empty, just move the item
+            if (targetItem == null)
+            {
+                toSlot.SetSlotItem(movedItem);
+                fromSlot.SetSlotItem(null);
+                return;
+            }
+
+            // If the items are the same type, try to merge them
+            if (targetItem.baseItem.id == movedItem.baseItem.id)
+            {
+                int combinedQuantity = targetItem.quantity + movedItem.quantity;
+                int maxStack = movedItem.baseItem.maxStack;
+
+                // If combined quantity exceeds max stack, leave the excess in the fromSlot
+                if (combinedQuantity > maxStack)
+                {
+                    toSlot.SetSlotItem(new InventoryItem(movedItem.baseItem, maxStack));
+                    fromSlot.SetSlotItem(new InventoryItem(movedItem.baseItem, combinedQuantity - maxStack));
+                }
+                else
+                {
+                    toSlot.SetSlotItem(new InventoryItem(movedItem.baseItem, combinedQuantity));
+                    fromSlot.SetSlotItem(null);
+                }
+            }
+            else
+            {
+                // Swap items if they are different
+                toSlot.SetSlotItem(movedItem);
+                fromSlot.SetSlotItem(targetItem);
+            }
         }
 
         private int? GetFirstFreeSlot(InventoryItem inventoryItem)

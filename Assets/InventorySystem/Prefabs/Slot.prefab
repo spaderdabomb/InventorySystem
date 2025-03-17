@@ -59,7 +59,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -148,6 +148,7 @@ GameObject:
   - component: {fileID: 1474522208890643813}
   - component: {fileID: 871057777879064156}
   - component: {fileID: 6604971763562966578}
+  - component: {fileID: 2420536666315806472}
   m_Layer: 5
   m_Name: Slot
   m_TagString: Untagged
@@ -228,6 +229,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 6312735549900607402}
   quantityLabel: {fileID: 3789623813700371322}
+--- !u!114 &2420536666315806472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4002973993165828337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee8e436d97a2dcb499024ea6ec07b6d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostIconPrefab: {fileID: 3484968517235138200, guid: 0ae0fed68c2bb7d4e96cc63837a0b218,
+    type: 3}
+  ghostIconScale: 0.9
 --- !u!1 &6312735549900607402
 GameObject:
   m_ObjectHideFlags: 0
@@ -287,7 +303,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

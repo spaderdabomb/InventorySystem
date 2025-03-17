@@ -18,7 +18,11 @@ namespace InventorySystem
         private void Start()
         {
             _iconImage = icon.GetComponent<RawImage>();
+            _iconImage.raycastTarget = false;
+
             _quantityLabelText = quantityLabel.GetComponent<TextMeshProUGUI>();
+            _quantityLabelText.raycastTarget = false;
+
             SetItemUIState(false);
         }
 

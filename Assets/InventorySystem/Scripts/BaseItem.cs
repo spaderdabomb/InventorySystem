@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace InventorySystem
@@ -15,6 +12,11 @@ namespace InventorySystem
         public int maxStack = 50;
 
         public Sprite icon;
+
+        private void OnValidate()
+        {
+            id = Guid.TryParse(id, out _) ? id : Guid.NewGuid().ToString();
+        }
     }
 
 }
