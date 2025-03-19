@@ -10,7 +10,7 @@ namespace InventorySystem
         [SerializeField] private float ghostIconScale = 0.9f;
 
         private static GameObject ghostIcon;
-        private static BaseSlot originSlot;
+        private static InventorySlot originSlot;
         private Transform canvasTransform;
 
         private void Awake()
@@ -20,7 +20,7 @@ namespace InventorySystem
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            originSlot = GetComponent<BaseSlot>();
+            originSlot = GetComponent<InventorySlot>();
             if (originSlot.inventoryItem == null || ghostIconPrefab == null)
                 return;
 
@@ -49,7 +49,7 @@ namespace InventorySystem
             if (hoveredObject == null)
                 return;
 
-            BaseSlot targetSlot = hoveredObject.GetComponent<BaseSlot>();
+            InventorySlot targetSlot = hoveredObject.GetComponent<InventorySlot>();
             if (targetSlot != null && targetSlot != originSlot)
             {
                 BaseInventory inventory = originSlot.GetComponentInParent<BaseInventory>();

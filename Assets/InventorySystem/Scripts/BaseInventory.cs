@@ -8,20 +8,20 @@ namespace InventorySystem
         [SerializeField] private int rows;
         [SerializeField] private int columns;
         [SerializeField] GameObject slotContainer;
-        [SerializeField] GameObject baseSlotPrefab;
+        [SerializeField] GameObject slotPrefab;
 
         private int numSlots;
-        private BaseSlot[] slots;
+        private InventorySlot[] slots;
 
         private void Start()
         {
             numSlots = rows * columns;
-            slots = new BaseSlot[numSlots];
+            slots = new InventorySlot[numSlots];
 
             for (int i = 0; i < numSlots; i++)
             {
-                GameObject newBaseSlot = Instantiate(baseSlotPrefab, slotContainer.transform);
-                slots[i] = newBaseSlot.GetComponent<BaseSlot>();
+                GameObject newSlot = Instantiate(slotPrefab, slotContainer.transform);
+                slots[i] = newSlot.GetComponent<InventorySlot>();
             }
 
             RectTransform slotContainerRT = slotContainer.GetComponent<RectTransform>();
@@ -60,8 +60,8 @@ namespace InventorySystem
 
         private int AddItemToSlot(InventoryItem inventoryItem, int index)
         {
-            BaseSlot baseSlot = slots[index];
-            InventoryItem existingItem = baseSlot.inventoryItem ?? new InventoryItem(inventoryItem.baseItem, 0);
+            InventorySlot slot = slots[index];
+            InventoryItem existingItem = slot.inventoryItem ?? new InventoryItem(inventoryItem.baseItem, 0);
 
             int totalQuantity = existingItem.quantity + inventoryItem.quantity;
             int slotQuantity = totalQuantity >= existingItem.baseItem.maxStack ? existingItem.baseItem.maxStack : totalQuantity;
@@ -102,9 +102,9 @@ namespace InventorySystem
 
         private int RemoveItemFromSlot(InventoryItem inventoryItem, int index)
         {
-            BaseSlot baseSlot = slots[index];
-            int quantityInSlot = Mathf.Max(baseSlot.inventoryItem.quantity - inventoryItem.quantity, 0);
-            int quantityRemaining = Mathf.Max(inventoryItem.quantity - baseSlot.inventoryItem.quantity, 0);
+            InventorySlot slot = slots[index];
+            int quantityInSlot = Mathf.Max(slot.inventoryItem.quantity - inventoryItem.quantity, 0);
+            int quantityRemaining = Mathf.Max(inventoryItem.quantity - slot.inventoryItem.quantity, 0);
 
             InventoryItem newItem = new InventoryItem(inventoryItem.baseItem, quantityInSlot);
             SetSlotItem(newItem, index);
@@ -117,7 +117,7 @@ namespace InventorySystem
             slots[index].SetSlotItem(inventoryItem);
         }
 
-        public void MoveItem(BaseSlot fromSlot, BaseSlot toSlot)
+        public void MoveItem(InventorySlot fromSlot, InventorySlot toSlot)
         {
             if (fromSlot.inventoryItem == null)
                 return;

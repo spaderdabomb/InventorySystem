@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace InventorySystem
 {
-    [CreateAssetMenu(fileName = "baseItem", menuName = "Items/BaseItem")]
+    [CreateAssetMenu(fileName = "baseItem", menuName = "Scriptable Objects/Items/BaseItem")]
     public class BaseItem : ScriptableObject
     {
         public string id = Guid.NewGuid().ToString();

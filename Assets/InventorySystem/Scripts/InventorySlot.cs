@@ -1,27 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace InventorySystem
 {
-    public class BaseSlot : MonoBehaviour
+    public class InventorySlot : MonoBehaviour
     {
         public InventoryItem inventoryItem = null;
-        public GameObject icon;
-        public GameObject quantityLabel;
 
-        private RawImage _iconImage;
-        private TextMeshProUGUI _quantityLabelText;
+        [SerializeField] private RawImage iconImage;
+        [SerializeField] private TextMeshProUGUI quantityLabelText;
+        [SerializeField] private TextMeshProUGUI hotkeyLabelText;
 
         private void Start()
         {
-            _iconImage = icon.GetComponent<RawImage>();
-            _iconImage.raycastTarget = false;
-
-            _quantityLabelText = quantityLabel.GetComponent<TextMeshProUGUI>();
-            _quantityLabelText.raycastTarget = false;
+            iconImage.raycastTarget = false;
+            quantityLabelText.raycastTarget = false;
+            hotkeyLabelText.raycastTarget = false;
 
             SetItemUIState(false);
         }
@@ -35,8 +30,8 @@ namespace InventorySystem
             }
 
             this.inventoryItem = inventoryItem;
-            _iconImage.texture = inventoryItem.baseItem.icon.texture;
-            _quantityLabelText.text = inventoryItem.quantity.ToString();
+            iconImage.texture = inventoryItem.baseItem.icon.texture;
+            quantityLabelText.text = inventoryItem.quantity.ToString();
             SetItemUIState(true);
         }
 
@@ -48,8 +43,11 @@ namespace InventorySystem
 
         private void SetItemUIState(bool state)
         {
-            icon.SetActive(state);
-            quantityLabel.SetActive(state);
+            iconImage.gameObject.SetActive(state);
+            quantityLabelText.gameObject.SetActive(state);
+
+            if (hotkeyLabelText != null)
+                hotkeyLabelText.gameObject.SetActive(true);
         }
     }
 }
