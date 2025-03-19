@@ -4,13 +4,13 @@ using UnityEngine.EventSystems;
 
 namespace InventorySystem
 {
-    public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class DragHandler<TSlot> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler where TSlot : BaseSlot
     {
         [SerializeField] private GameObject ghostIconPrefab;
         [SerializeField] private float ghostIconScale = 0.9f;
 
         private static GameObject ghostIcon;
-        private static BaseSlot originSlot;
+        private static TSlot originSlot;
         private Transform canvasTransform;
 
         private void Awake()
@@ -20,7 +20,7 @@ namespace InventorySystem
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            originSlot = GetComponent<BaseSlot>();
+            originSlot = GetComponent<TSlot>();
             if (originSlot.inventoryItem == null || ghostIconPrefab == null)
                 return;
 
@@ -49,10 +49,10 @@ namespace InventorySystem
             if (hoveredObject == null)
                 return;
 
-            BaseSlot targetSlot = hoveredObject.GetComponent<BaseSlot>();
+            TSlot targetSlot = hoveredObject.GetComponent<TSlot>();
             if (targetSlot != null && targetSlot != originSlot)
             {
-                BaseInventory inventory = originSlot.GetComponentInParent<BaseInventory>();
+                BaseInventory<TSlot> inventory = originSlot.GetComponentInParent<BaseInventory<TSlot>>();
                 inventory.MoveItem(originSlot, targetSlot);
             }
         }

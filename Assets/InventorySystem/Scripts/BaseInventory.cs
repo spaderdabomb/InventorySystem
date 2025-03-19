@@ -3,27 +3,39 @@ using UnityEngine.UI;
 
 namespace InventorySystem
 {
-    public class BaseInventory : MonoBehaviour
+    public class BaseInventory<TSlot> : MonoBehaviour where TSlot : BaseSlot
     {
-        [SerializeField] private int rows;
-        [SerializeField] private int columns;
-        [SerializeField] GameObject slotContainer;
-        [SerializeField] GameObject baseSlotPrefab;
+        [SerializeField] private protected int rows;
+        [SerializeField] private protected int columns;
+        [SerializeField] private protected GameObject slotContainer;
+        [SerializeField] private protected GameObject baseSlotPrefab;
 
-        private int numSlots;
-        private BaseSlot[] slots;
+        private protected int numSlots;
+        private protected TSlot[] slots;
 
         private void Start()
         {
+            InitSlots();
+            ResizeSlotContainer();
+        }
+
+        public virtual void InitSlots()
+        {
             numSlots = rows * columns;
-            slots = new BaseSlot[numSlots];
+            slots = new TSlot[numSlots];
 
             for (int i = 0; i < numSlots; i++)
             {
                 GameObject newBaseSlot = Instantiate(baseSlotPrefab, slotContainer.transform);
-                slots[i] = newBaseSlot.GetComponent<BaseSlot>();
+                slots[i] = newBaseSlot.GetComponent<TSlot>();
             }
 
+            print("new slots");
+
+        }
+
+        private void ResizeSlotContainer()
+        {
             RectTransform slotContainerRT = slotContainer.GetComponent<RectTransform>();
             GridLayoutGroup layoutGroup = slotContainer.GetComponent<GridLayoutGroup>();
             float width = (layoutGroup.cellSize.x + layoutGroup.spacing.x) * columns + 2 * layoutGroup.spacing.x;
@@ -60,7 +72,7 @@ namespace InventorySystem
 
         private int AddItemToSlot(InventoryItem inventoryItem, int index)
         {
-            BaseSlot baseSlot = slots[index];
+            TSlot baseSlot = slots[index];
             InventoryItem existingItem = baseSlot.inventoryItem ?? new InventoryItem(inventoryItem.baseItem, 0);
 
             int totalQuantity = existingItem.quantity + inventoryItem.quantity;
@@ -102,7 +114,7 @@ namespace InventorySystem
 
         private int RemoveItemFromSlot(InventoryItem inventoryItem, int index)
         {
-            BaseSlot baseSlot = slots[index];
+            TSlot baseSlot = slots[index];
             int quantityInSlot = Mathf.Max(baseSlot.inventoryItem.quantity - inventoryItem.quantity, 0);
             int quantityRemaining = Mathf.Max(inventoryItem.quantity - baseSlot.inventoryItem.quantity, 0);
 
@@ -117,7 +129,7 @@ namespace InventorySystem
             slots[index].SetSlotItem(inventoryItem);
         }
 
-        public void MoveItem(BaseSlot fromSlot, BaseSlot toSlot)
+        public void MoveItem(TSlot fromSlot, TSlot toSlot)
         {
             if (fromSlot.inventoryItem == null)
                 return;

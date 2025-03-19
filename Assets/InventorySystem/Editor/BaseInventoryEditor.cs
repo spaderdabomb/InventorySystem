@@ -1,19 +1,23 @@
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 namespace InventorySystem
 {
-    [CustomEditor(typeof(BaseInventory))]
+    [CustomEditor(typeof(MonoBehaviour), true)] // Applies to all MonoBehaviour subclasses
     public class BaseInventoryEditor : Editor
     {
         private BaseItem selectedItem;
         private int quantity = 1;
+        private object inventory; // Holds any `BaseInventory<T>`
 
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector(); // Draws default inspector fields
 
-            BaseInventory inventory = (BaseInventory)target;
+            // Find the correct inventory type dynamically
+            inventory = target;
+            var inventoryType = inventory.GetType();
+            if (!IsSubclassOfRawGeneric(typeof(BaseInventory<>), inventoryType)) return;
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Inventory Controls", EditorStyles.boldLabel);
@@ -25,8 +29,9 @@ namespace InventorySystem
             {
                 if (selectedItem != null)
                 {
-                    inventory.AddItem(selectedItem, quantity);
-                    EditorUtility.SetDirty(inventory);
+                    var addItemMethod = inventoryType.GetMethod("AddItem");
+                    addItemMethod?.Invoke(inventory, new object[] { selectedItem, quantity });
+                    EditorUtility.SetDirty((Object)inventory);
                 }
                 else
                 {
@@ -38,8 +43,9 @@ namespace InventorySystem
             {
                 if (selectedItem != null)
                 {
-                    inventory.RemoveItem(selectedItem, quantity);
-                    EditorUtility.SetDirty(inventory);
+                    var removeItemMethod = inventoryType.GetMethod("RemoveItem");
+                    removeItemMethod?.Invoke(inventory, new object[] { selectedItem, quantity });
+                    EditorUtility.SetDirty((Object)inventory);
                 }
                 else
                 {
@@ -47,6 +53,16 @@ namespace InventorySystem
                 }
             }
         }
-    }
 
+        private bool IsSubclassOfRawGeneric(System.Type generic, System.Type toCheck)
+        {
+            while (toCheck != null && toCheck != typeof(object))
+            {
+                var cur = toCheck.IsGenericType ? toCheck.GetGenericTypeDefinition() : toCheck;
+                if (generic == cur) return true;
+                toCheck = toCheck.BaseType;
+            }
+            return false;
+        }
+    }
 }
