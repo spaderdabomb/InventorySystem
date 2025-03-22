@@ -6,16 +6,43 @@ namespace InventorySystem
 {
     public class InventoryManager : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        public static InventoryManager Instance;
+
+        public BaseInventory playerInventory;
+        public HotbarInventory hotbarInventory;
+
+        public AudioSource audioSource;
+        public InventoryInput inventoryInput;
+
+        public InventorySlot CurrentHoverSlot { get; private set; } = null;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
+
+        public void InventoryClick()
         {
 
         }
 
-        // Update is called once per frame
-        void Update()
+        public void PlayInventorySound(AudioClip audioClip)
         {
+            if (audioSource != null)
+                audioSource.PlayOneShot(audioClip);
+        }
 
+        public void SetCurrentHoverSlot(InventorySlot inventorySlot)
+        {
+            CurrentHoverSlot = inventorySlot;
+        }
+
+        public void SplitItem()
+        {
+            if (CurrentHoverSlot == null)
+                return;
+
+            CurrentHoverSlot.ParentInventory.SplitItem(CurrentHoverSlot);
         }
     }
 }

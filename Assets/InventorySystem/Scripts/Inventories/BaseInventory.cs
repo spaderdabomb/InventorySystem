@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace InventorySystem
@@ -11,9 +12,9 @@ namespace InventorySystem
         [SerializeField] GameObject slotPrefab;
 
         private int numSlots;
-        private InventorySlot[] slots;
+        private protected InventorySlot[] slots;
 
-        private void Start()
+        public virtual void Start()
         {
             numSlots = rows * columns;
             slots = new InventorySlot[numSlots];
@@ -157,6 +158,39 @@ namespace InventorySystem
                 toSlot.SetSlotItem(movedItem);
                 fromSlot.SetSlotItem(targetItem);
             }
+        }
+
+        public bool SplitItem(InventorySlot slotToSplit)
+        {
+            if (slotToSplit == null || slotToSplit.inventoryItem == null || slotToSplit.inventoryItem.quantity <= 1)
+            {
+                Debug.LogWarning("Cannot split: slot is empty or has only 1 item");
+                return false;
+            }
+
+            BaseItem itemToSplit = slotToSplit.inventoryItem.baseItem;
+            int totalQuantity = slotToSplit.inventoryItem.quantity;
+            int halfQuantity = totalQuantity / 2; // Integer division rounds down automatically
+            int remainingQuantity = totalQuantity - halfQuantity;
+
+            // Create new inventory item with half the quantity
+            InventoryItem newSplitItem = new InventoryItem(itemToSplit, halfQuantity);
+
+            // Find the first available slot
+            int? freeSlotIdx = GetFirstFreeSlot(newSplitItem);
+            if (freeSlotIdx == null)
+            {
+                Debug.LogWarning("Cannot split: no free slot available");
+                return false;
+            }
+
+            // Update the original slot with remaining quantity
+            slotToSplit.SetSlotItem(new InventoryItem(itemToSplit, remainingQuantity));
+
+            // Add the split item to the free slot
+            SetSlotItem(newSplitItem, (int)freeSlotIdx);
+
+            return true;
         }
 
         private int? GetFirstFreeSlot(InventoryItem inventoryItem)
