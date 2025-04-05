@@ -12,22 +12,23 @@ namespace InventorySystem
         private void Start()
         {
             baseInventory = GetComponent<BaseInventory>();
+
             SetSelectedSlot(SelectedIndex);
         }
 
         public void SetSelectedSlot(int index)
         {
-            if (!baseInventory.slots[index].ContainsItem() && !canSelectEmptySlots)
+            if (!baseInventory.Slots[index].ContainsItem() && !canSelectEmptySlots)
                 return;
 
             SelectedIndex = index;
 
-            for (int i = 0; i < baseInventory.slots.Length; i++)
+            for (int i = 0; i < baseInventory.Slots.Length; i++)
             {
                 if (i == SelectedIndex)
-                    baseInventory.slots[i].SetSelected();
+                    baseInventory.inventoryUI.SlotsUI[i].SetSelected();
                 else
-                    baseInventory.slots[i].ClearSlotSelection();
+                    baseInventory.inventoryUI.SlotsUI[i].ClearSlotSelection();
             }
         }
     }

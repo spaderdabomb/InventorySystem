@@ -22,8 +22,8 @@ namespace InventorySystem
             // If the target slot is empty, just move the item
             if (targetItem == null)
             {
-                toSlot.SetSlotItem(movedItem);
-                fromSlot.SetSlotItem(null);
+                toSlot.ParentInventory.SetSlotItem(movedItem, toSlot);
+                fromSlot.ParentInventory.SetSlotItem(null, fromSlot);
                 return;
             }
 
@@ -36,20 +36,20 @@ namespace InventorySystem
                 // If combined quantity exceeds max stack, leave the excess in the fromSlot
                 if (combinedQuantity > maxStack)
                 {
-                    toSlot.SetSlotItem(new InventoryItem(movedItem.baseItem, maxStack));
-                    fromSlot.SetSlotItem(new InventoryItem(movedItem.baseItem, combinedQuantity - maxStack));
+                    toSlot.ParentInventory.SetSlotItem(new InventoryItem(movedItem.baseItem, maxStack), toSlot);
+                    fromSlot.ParentInventory.SetSlotItem(new InventoryItem(movedItem.baseItem, combinedQuantity - maxStack), fromSlot);
                 }
                 else
                 {
-                    toSlot.SetSlotItem(new InventoryItem(movedItem.baseItem, combinedQuantity));
-                    fromSlot.SetSlotItem(null);
+                    toSlot.ParentInventory.SetSlotItem(new InventoryItem(movedItem.baseItem, combinedQuantity), toSlot);
+                    fromSlot.ParentInventory.SetSlotItem(null, fromSlot);
                 }
             }
             else
             {
                 // Swap items if they are different
-                toSlot.SetSlotItem(movedItem);
-                fromSlot.SetSlotItem(targetItem);
+                toSlot.ParentInventory.SetSlotItem(movedItem, toSlot);
+                fromSlot.ParentInventory.SetSlotItem(targetItem, fromSlot);
             }
         }
 
@@ -71,9 +71,8 @@ namespace InventorySystem
             }
 
             // Update the original and target slots with new items
-            slotToSplit.SetSlotItem(new InventoryItem(itemToSplit, remainingQuantity));
-            InventoryItem newSplitItem = new InventoryItem(itemToSplit, halfQuantity);
-            baseInventory.SetSlotItem(newSplitItem, slot);
+            slotToSplit.ParentInventory.SetSlotItem(new InventoryItem(itemToSplit, remainingQuantity), slotToSplit);
+            baseInventory.SetSlotItem(new InventoryItem(itemToSplit, halfQuantity), slot);
 
             return true;
         }

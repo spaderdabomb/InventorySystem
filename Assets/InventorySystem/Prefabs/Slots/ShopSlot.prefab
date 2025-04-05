@@ -85,6 +85,16 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 70
       objectReference: {fileID: 0}
+    - target: {fileID: 3370379309531259911, guid: bfce3b23c1a8f9041ba8d1c90b4d4405,
+        type: 3}
+      propertyPath: button
+      value: 
+      objectReference: {fileID: 2509440897930497996}
+    - target: {fileID: 3370379309531259911, guid: bfce3b23c1a8f9041ba8d1c90b4d4405,
+        type: 3}
+      propertyPath: slotBg
+      value: 
+      objectReference: {fileID: 8642599977111344959}
     - target: {fileID: 4002973993165828337, guid: bfce3b23c1a8f9041ba8d1c90b4d4405,
         type: 3}
       propertyPath: m_Name

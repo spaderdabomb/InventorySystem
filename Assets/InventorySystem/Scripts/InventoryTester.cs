@@ -25,17 +25,37 @@ namespace InventorySystem
             TextMeshProUGUI label = buttonGO.GetComponentInChildren<TextMeshProUGUI>();
 
             chestButtons.Add(button);
-            InventoryManager.Instance.AddChest();
+            InventoryManager.Instance.chestManager.AddChest();
 
             int chestIndex = chestButtons.Count;
-            BaseInventory inventoryRef = InventoryManager.Instance.chestInventories[chestIndex-1];
+            BaseInventory inventoryRef = InventoryManager.Instance.chestManager.chestInventories[chestIndex-1];
             label.text = $"Chest {chestIndex}";
-            button.onClick.AddListener(() => InventoryManager.Instance.ShowChest(inventoryRef));
+            button.onClick.AddListener(() => inventoryRef.inventoryUI.ToggleInventory(inventoryRef));
         }
 
         public void AddShop()
         {
-            print("Adding shop");
+            GameObject buttonGO = Instantiate(openInterfaceButtonPrefab, shopButtonLayout.transform);
+            Button button = buttonGO.GetComponent<Button>();
+            TextMeshProUGUI label = buttonGO.GetComponentInChildren<TextMeshProUGUI>();
+
+            shopButtons.Add(button);
+            InventoryManager.Instance.shopManager.AddShop();
+
+            int shopIndex = shopButtons.Count;
+            BaseInventory inventoryRef = InventoryManager.Instance.shopManager.inventories[shopIndex - 1];
+            label.text = $"Shop {shopIndex}";
+            button.onClick.AddListener(() => inventoryRef.inventoryUI.ToggleInventory(inventoryRef));
+        }
+
+        public void TogglePlayerInventory()
+        {
+            InventoryManager.Instance.playerInventory.inventoryUI.ToggleInventory(InventoryManager.Instance.playerInventory);
+        }
+
+        public void ToggleHotbar()
+        {
+            InventoryManager.Instance.hotbarInventory.inventoryUI.ToggleInventory(InventoryManager.Instance.hotbarInventory);
         }
     }
 }

@@ -7,32 +7,31 @@ namespace InventorySystem
 {
     public class BaseInventory : MonoBehaviour
     {
-        [SerializeField] private int rows;
-        [SerializeField] private int columns;
+        [SerializeField] public int rows;
+        [SerializeField] public int columns;
 
-        [SerializeField] private GameObject slotContainer;
-        [SerializeField] private GameObject slotPrefab;
-        [SerializeField] private GameObject inventoryUI;
+        [SerializeField] public BaseInventoryUI inventoryUI;
+        [HideInInspector] public InventorySlot[] Slots { get; private set; } = null;
 
-        [HideInInspector] public InventorySlot[] slots;
-        private int numSlots;
+        public int NumSlots { get; private set; }
 
         public virtual void Awake()
         {
-            numSlots = rows * columns;
-            slots = new InventorySlot[numSlots];
+            NumSlots = rows * columns;
+            Slots = new InventorySlot[NumSlots];
 
-            for (int i = 0; i < numSlots; i++)
+            for (int i = 0; i < NumSlots; i++)
             {
-                GameObject newSlot = Instantiate(slotPrefab, slotContainer.transform);
-                slots[i] = newSlot.GetComponent<InventorySlot>();
+                Slots[i] = new InventorySlot(this);
             }
 
-            RectTransform slotContainerRT = slotContainer.GetComponent<RectTransform>();
-            GridLayoutGroup layoutGroup = slotContainer.GetComponent<GridLayoutGroup>();
-            float width = (layoutGroup.cellSize.x + layoutGroup.spacing.x) * columns + 2 * layoutGroup.spacing.x;
-            float height = (layoutGroup.cellSize.y + layoutGroup.spacing.y) * rows + 2 * layoutGroup.spacing.y;
-            slotContainerRT.sizeDelta = new Vector2(width, height);
+            if (inventoryUI != null && inventoryUI.gameObject.activeSelf)
+                inventoryUI.ShowInventory(this);
+        }
+
+        public void Initialize(BaseInventoryUI inventoryUI)
+        {
+            this.inventoryUI = inventoryUI;
         }
 
         public int AddItem(BaseItem baseItem, int quantity)
@@ -111,16 +110,17 @@ namespace InventorySystem
         public void SetSlotItem(InventoryItem inventoryItem, InventorySlot slot)
         {
             slot.SetSlotItem(inventoryItem);
+            inventoryUI.SlotsUI[slot.GetIndexOf()].SetSlotItem();
         }
 
         public InventorySlot GetFirstEmptySlot()
         {
-            return slots.FirstOrDefault(slot => !slot.ContainsItem());
+            return Slots.FirstOrDefault(slot => !slot.ContainsItem());
         }
 
         public InventorySlot GetFirstFreeSlot(InventoryItem inventoryItem)
         {
-            return slots.FirstOrDefault(slot =>
+            return Slots.FirstOrDefault(slot =>
                 !slot.ContainsItem() ||
                 (slot.inventoryItem.baseItem.id == inventoryItem.baseItem.id &&
                  slot.inventoryItem.quantity < inventoryItem.baseItem.maxStack)
@@ -129,36 +129,14 @@ namespace InventorySystem
 
         public InventorySlot GetFirstSlotWithItem(BaseItem baseItem)
         {
-            return slots.FirstOrDefault(slot => slot.inventoryItem?.baseItem.id == baseItem.id);
+            return Slots.FirstOrDefault(slot => slot.inventoryItem?.baseItem.id == baseItem.id);
         }
 
         public int GetTotalItemQuantity(BaseItem baseItem)
         {
-            return slots
+            return Slots
                 .Where(slot => slot.ContainsItem() && slot.inventoryItem.baseItem.id == baseItem.id)
                 .Sum(slot => slot.inventoryItem.quantity);
-        }
-
-        public void ShowInventory()
-        {
-            if (inventoryUI == null)
-            {
-                Debug.LogWarning($"Inventory UI for {this} not set - set in inspector");
-                return;
-            }
-
-            inventoryUI.SetActive(true);
-        }
-
-        public void HideInventory()
-        {
-            if (inventoryUI == null)
-            {
-                Debug.LogWarning($"Inventory UI for {this} not set - set in inspector");
-                return;
-            }
-
-            inventoryUI.SetActive(false);
         }
     }
 }

@@ -148,8 +148,8 @@ GameObject:
   - component: {fileID: 1474522208890643813}
   - component: {fileID: 871057777879064156}
   - component: {fileID: 1763588230890907816}
-  - component: {fileID: 6604971763562966578}
   - component: {fileID: 2420536666315806472}
+  - component: {fileID: 3370379309531259911}
   m_Layer: 5
   m_Name: BaseSlot
   m_TagString: Untagged
@@ -260,27 +260,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6604971763562966578
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4002973993165828337}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bfacf67380879f4fbe7ca45ec38cd90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  button: {fileID: 1763588230890907816}
-  iconImage: {fileID: 7433016119440931687}
-  slotBg: {fileID: 0}
-  quantityLabelText: {fileID: 4570225721443791443}
-  hotkeyLabelText: {fileID: 0}
-  hoverScale: 1.15
-  dragTint: 0.7
-  hoverSound: {fileID: 8300000, guid: 14d49617b44e60746b42e2bafa8dd1ed, type: 3}
-  selectedSound: {fileID: 8300000, guid: 3bb2ddb4dccfd15439dc3a4571e324b9, type: 3}
 --- !u!114 &2420536666315806472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,6 +276,27 @@ MonoBehaviour:
     type: 3}
   ghostIconScale: 0.9
   IsDragging: 0
+--- !u!114 &3370379309531259911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4002973993165828337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34ccea13586657c40a4ab1dd03f28ce9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 1763588230890907816}
+  iconImage: {fileID: 7433016119440931687}
+  slotBg: {fileID: 0}
+  quantityLabelText: {fileID: 4570225721443791443}
+  hotkeyLabelText: {fileID: 0}
+  hoverScale: 1.2
+  dragTint: 0.7
+  hoverSound: {fileID: 8300000, guid: 14d49617b44e60746b42e2bafa8dd1ed, type: 3}
+  selectedSound: {fileID: 8300000, guid: 3bb2ddb4dccfd15439dc3a4571e324b9, type: 3}
 --- !u!1 &6312735549900607402
 GameObject:
   m_ObjectHideFlags: 0

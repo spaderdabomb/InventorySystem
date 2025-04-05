@@ -10,7 +10,7 @@ namespace InventorySystem
         [SerializeField] private float ghostIconScale = 0.9f;
 
         private static GameObject ghostIcon;
-        private static InventorySlot originSlot;
+        private static InventorySlotUI originSlotUI;
         private Transform canvasTransform;
 
         public bool IsDragging = false;
@@ -22,20 +22,20 @@ namespace InventorySystem
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            originSlot = GetComponent<InventorySlot>();
-            originSlot.ParentInventory.TryGetComponent(out InteractableComponent interactable);
-            if (originSlot.inventoryItem == null || ghostIconPrefab == null || interactable == null)
+            originSlotUI = GetComponent<InventorySlotUI>();
+            originSlotUI.InventorySlot.ParentInventory.TryGetComponent(out InteractableComponent interactable);
+            if (!originSlotUI.InventorySlot.ContainsItem() || ghostIconPrefab == null || interactable == null)
                 return;
 
-            originSlot.UpdateDragBeginUI();
+            originSlotUI.UpdateDragBeginUI();
 
             ghostIcon = Instantiate(ghostIconPrefab, canvasTransform);
             Image ghostImage = ghostIcon.GetComponent<Image>();
 
-            ghostImage.sprite = originSlot.inventoryItem.baseItem.icon;
+            ghostImage.sprite = originSlotUI.InventorySlot.inventoryItem.baseItem.icon;
             ghostImage.raycastTarget = false;
 
-            Vector2 slotSize = originSlot.GetComponent<RectTransform>().sizeDelta;
+            Vector2 slotSize = originSlotUI.GetComponent<RectTransform>().sizeDelta;
             ghostIcon.GetComponent<RectTransform>().sizeDelta = slotSize * ghostIconScale;
 
             IsDragging = true;
@@ -50,7 +50,7 @@ namespace InventorySystem
         public void OnEndDrag(PointerEventData eventData)
         {
             IsDragging = false;
-            originSlot.UpdateDragEndUI();
+            originSlotUI.UpdateDragEndUI();
 
             if (ghostIcon)
                 Destroy(ghostIcon);
@@ -59,15 +59,15 @@ namespace InventorySystem
             if (hoveredObject == null)
                 return;
 
-            InventorySlot targetSlot = hoveredObject.GetComponent<InventorySlot>();
-            if (targetSlot != null && targetSlot != originSlot)
+            InventorySlotUI targetSlotUI = hoveredObject.GetComponent<InventorySlotUI>();
+            if (targetSlotUI != null && targetSlotUI != originSlotUI)
             {
-                originSlot.ParentInventory.TryGetComponent(out InteractableComponent originInteractable);
-                targetSlot.ParentInventory.TryGetComponent(out InteractableComponent targetInteractable);
+                originSlotUI.InventorySlot.ParentInventory.TryGetComponent(out InteractableComponent originInteractable);
+                targetSlotUI.InventorySlot.ParentInventory.TryGetComponent(out InteractableComponent targetInteractable);
                 if (originInteractable == null || targetInteractable == null)
                     return;
 
-                originInteractable.MoveItem(originSlot, targetSlot);
+                originInteractable.MoveItem(originSlotUI.InventorySlot, targetSlotUI.InventorySlot);
             }
         }
     }
