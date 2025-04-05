@@ -4,14 +4,11 @@ using UnityEngine.InputSystem;
 
 namespace InventorySystem
 {
+    [RequireComponent(typeof(SelectableComponent), typeof(InteractableComponent))]
     public class HotbarInventory : BaseInventory
     {
-        [HideInInspector] public int selectedIndex = 0;
-
-        public override void Start()
+        public void Start()
         {
-            base.Start();
-            SetSelectedSlot(selectedIndex);
             InitHotkeyLabels();
         }
 
@@ -22,19 +19,6 @@ namespace InventorySystem
             {
                 string hotkey = slotActions[i].bindings.Count > 0 ? slotActions[i].GetBindingDisplayString() : (i + 1).ToString();
                 slots[i].SetHotkeyText(hotkey);
-            }
-        }
-
-        public void SetSelectedSlot(int index)
-        {
-            selectedIndex = index;
-
-            for (int i = 0; i < slots.Length; i++)
-            {
-                if (i == selectedIndex)
-                    slots[i].SetSelected();
-                else
-                    slots[i].ClearSlotSelection();
             }
         }
     }

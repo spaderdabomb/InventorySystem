@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b879819e64f290347b0427252d51fc8d, type: 3}
+  m_Name: AxeSteel
+  m_EditorClassIdentifier: 
+  id: 0a91b400-92d7-480b-927c-752715a9d432
+  displayName: Steel Axe
+  description: A sturdy axe
+  maxStack: 1
+  icon: {fileID: 21300000, guid: ac2d6b5966c419f42935a4668a40bafe, type: 3}

@@ -13,6 +13,8 @@ namespace InventorySystem
         private static InventorySlot originSlot;
         private Transform canvasTransform;
 
+        public bool IsDragging = false;
+
         private void Awake()
         {
             canvasTransform = GetComponentInParent<Canvas>().transform;
@@ -21,8 +23,11 @@ namespace InventorySystem
         public void OnBeginDrag(PointerEventData eventData)
         {
             originSlot = GetComponent<InventorySlot>();
-            if (originSlot.inventoryItem == null || ghostIconPrefab == null)
+            originSlot.ParentInventory.TryGetComponent(out InteractableComponent interactable);
+            if (originSlot.inventoryItem == null || ghostIconPrefab == null || interactable == null)
                 return;
+
+            originSlot.UpdateDragBeginUI();
 
             ghostIcon = Instantiate(ghostIconPrefab, canvasTransform);
             Image ghostImage = ghostIcon.GetComponent<Image>();
@@ -32,6 +37,8 @@ namespace InventorySystem
 
             Vector2 slotSize = originSlot.GetComponent<RectTransform>().sizeDelta;
             ghostIcon.GetComponent<RectTransform>().sizeDelta = slotSize * ghostIconScale;
+
+            IsDragging = true;
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -42,6 +49,9 @@ namespace InventorySystem
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            IsDragging = false;
+            originSlot.UpdateDragEndUI();
+
             if (ghostIcon)
                 Destroy(ghostIcon);
 
@@ -52,8 +62,12 @@ namespace InventorySystem
             InventorySlot targetSlot = hoveredObject.GetComponent<InventorySlot>();
             if (targetSlot != null && targetSlot != originSlot)
             {
-                BaseInventory inventory = originSlot.GetComponentInParent<BaseInventory>();
-                inventory.MoveItem(originSlot, targetSlot);
+                originSlot.ParentInventory.TryGetComponent(out InteractableComponent originInteractable);
+                targetSlot.ParentInventory.TryGetComponent(out InteractableComponent targetInteractable);
+                if (originInteractable == null || targetInteractable == null)
+                    return;
+
+                originInteractable.MoveItem(originSlot, targetSlot);
             }
         }
     }

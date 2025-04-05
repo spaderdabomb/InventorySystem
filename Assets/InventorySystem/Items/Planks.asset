@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b879819e64f290347b0427252d51fc8d, type: 3}
-  m_Name: TestItem_2
+  m_Name: Planks
   m_EditorClassIdentifier: 
-  id: b6064b8d-7c0f-44b9-8690-fc35422b73f0
-  displayName: Test Item 2
-  description: A test item description 2
+  id: 153463e4-9684-4c66-a537-36f269ddf29c
+  displayName: Planks
+  description: That would be a sick place to plank
   maxStack: 50
-  icon: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  icon: {fileID: 21300000, guid: 6134bd63c2bfba5448db3218e8e25bf1, type: 3}

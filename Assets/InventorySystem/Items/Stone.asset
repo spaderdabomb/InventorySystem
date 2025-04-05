@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b879819e64f290347b0427252d51fc8d, type: 3}
-  m_Name: TestItem
+  m_Name: Stone
   m_EditorClassIdentifier: 
-  id: 22a59684-7b04-4c01-b73d-448c84f0a19e
-  displayName: Test Item
-  description: A test item description
+  id: 153463e4-9684-4c66-a537-36f269ddf29c
+  displayName: Stone
+  description: A small stone
   maxStack: 50
-  icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  icon: {fileID: 21300000, guid: 1d4272a50fe25cf46ad6f1707f8e384e, type: 3}

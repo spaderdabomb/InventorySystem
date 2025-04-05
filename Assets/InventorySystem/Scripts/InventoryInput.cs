@@ -36,7 +36,8 @@ namespace InventorySystem
                 slotActions[i].performed += ctx => SetSlotActive(index);
             }
 
-            inventoryActions.HotbarActionMap.InventoryClick.performed += InventoryClick;
+            inventoryActions.HotbarActionMap.InventoryClick.performed += InventoryMouseDown;
+            inventoryActions.HotbarActionMap.InventoryClick.canceled += InventoryMouseUp;
             inventoryActions.HotbarActionMap.Split.performed += Split;
         }
 
@@ -54,12 +55,21 @@ namespace InventorySystem
 
         private void SetSlotActive(int index)
         {
-            InventoryManager.Instance.hotbarInventory.SetSelectedSlot(index);
+            InventoryManager.Instance.hotbarInventory.TryGetComponent(out SelectableComponent selectable);
+            if (selectable == null)
+                return;
+
+            selectable.SetSelectedSlot(index);
         }
 
-        private void InventoryClick(InputAction.CallbackContext context)
+        private void InventoryMouseDown(InputAction.CallbackContext context)
         {
-            InventoryManager.Instance.InventoryClick();
+            InventoryManager.Instance.InventoryMouseDown();
+        }
+
+        private void InventoryMouseUp(InputAction.CallbackContext context) 
+        {
+            InventoryManager.Instance.InventoryMouseUp();
         }
 
         private void Split(InputAction.CallbackContext context)

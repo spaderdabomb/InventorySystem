@@ -3,17 +3,27 @@ using UnityEditor;
 
 namespace InventorySystem
 {
+    [CustomEditor(typeof(HotbarInventory))]
+    public class HotbarInventoryEditor : BaseInventoryEditor<HotbarInventory> { }
+
     [CustomEditor(typeof(BaseInventory))]
-    public class BaseInventoryEditor : Editor
+    public class InventoryEditor : BaseInventoryEditor<BaseInventory> { }
+
+    public class BaseInventoryEditor<T> : Editor where T : BaseInventory
     {
         private BaseItem selectedItem;
         private int quantity = 1;
 
+        private void OnEnable()
+        {
+            selectedItem = InventoryManager.Instance.defaultItem;
+        }
+
         public override void OnInspectorGUI()
         {
-            DrawDefaultInspector(); // Draws default inspector fields
+            DrawDefaultInspector();
 
-            BaseInventory inventory = (BaseInventory)target;
+            T inventory = (T)target;
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Inventory Controls", EditorStyles.boldLabel);
