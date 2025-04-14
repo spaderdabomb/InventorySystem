@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -56,6 +57,24 @@ namespace InventorySystem
         public void ToggleHotbar()
         {
             InventoryManager.Instance.hotbarInventory.inventoryUI.ToggleInventory(InventoryManager.Instance.hotbarInventory);
+        }
+
+        public void ToggleChestUI()
+        {
+            var firstChest = (InventoryManager.Instance.chestManager.chestInventories.Count > 0) ? InventoryManager.Instance.chestManager.chestInventories[0] : null;
+            if (firstChest == null && !InventoryManager.Instance.chestManager.chestUI.gameObject.activeSelf)
+                Debug.LogWarning("No chests have been created - create a chest before showing chestUI!");
+
+            InventoryManager.Instance.chestManager.chestUI.ToggleInventory(firstChest);
+        }
+
+        public void ToggleShopUI()
+        {
+            var firstShop = (InventoryManager.Instance.shopManager.inventories.Count > 0) ? InventoryManager.Instance.shopManager.inventories[0] : null;
+            if (firstShop == null && !InventoryManager.Instance.shopManager.inventoryUI.gameObject.activeSelf)
+                Debug.LogWarning("No shops have been created - create a shop before showing shopUI!");
+
+            InventoryManager.Instance.shopManager.inventoryUI.ToggleInventory(firstShop);
         }
     }
 }

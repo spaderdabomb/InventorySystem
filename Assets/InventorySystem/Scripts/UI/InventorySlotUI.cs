@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -13,10 +14,12 @@ namespace InventorySystem
         [SerializeField] private Button button;
         [SerializeField] private RawImage iconImage;
         [SerializeField] private RawImage slotBg;
+        [SerializeField] private RawImage backingIcon;
         [SerializeField] private TextMeshProUGUI quantityLabelText;
         [SerializeField] private TextMeshProUGUI hotkeyLabelText;
         [SerializeField] private float hoverScale = 1.2f;
         [SerializeField] private float dragTint = 0.7f;
+        [SerializeField] private float tooltipHoverTime = 0.5f;
 
         [SerializeField] private AudioClip hoverSound;
         [SerializeField] private AudioClip selectedSound;
@@ -25,6 +28,8 @@ namespace InventorySystem
         private Color _iconStartColor;
         private Color _slotStartColor;
         private RectTransform _iconRectTransform;
+        private float _timeHoveringSlot = 0f;
+        private bool _isHovering = false;
 
         public BaseInventory ParentInventory { get; private set; }
 
@@ -49,6 +54,16 @@ namespace InventorySystem
 
             UpdateSlotUI(false);
             DisableSelection();
+        }
+
+        private void Update()
+        {
+            if (!_isHovering)
+                return;
+
+            _timeHoveringSlot += Time.deltaTime;
+            if (_timeHoveringSlot > tooltipHoverTime && InventorySlot.ContainsItem())
+                InventoryManager.Instance.itemTooltip.Show(InventorySlot.inventoryItem.baseItem);
         }
 
         private void Start()
@@ -97,21 +112,29 @@ namespace InventorySystem
 
             InventoryManager.Instance.SetCurrentHoverSlot(this);
             _iconRectTransform.sizeDelta = _iconStartSize * hoverScale;
+            _isHovering = true;
+            _timeHoveringSlot = 0f;
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
             _iconRectTransform.sizeDelta = _iconStartSize;
             InventoryManager.Instance.SetCurrentHoverSlot(null);
+            InventoryManager.Instance.itemTooltip.Hide();
+            _isHovering = false;
+            _timeHoveringSlot = 0f;
         }
 
         public void SetSelected()
         {
-            if (slotBg != null)
+            if (slotBg == null)
             {
-                slotBg.gameObject.SetActive(true);
-                InventoryManager.Instance.PlayInventorySound(selectedSound);
+                Debug.LogWarning("Attemping to set slot selected without background element - choose a different slot prefab");
+                return;
             }
+
+            slotBg.gameObject.SetActive(true);
+            InventoryManager.Instance.PlayInventorySound(selectedSound);
         }
 
         public void ClearSlotSelection()
@@ -124,6 +147,14 @@ namespace InventorySystem
         {
             if (hotkeyLabelText != null)
                 hotkeyLabelText.text = hotkey;
+        }
+
+        public void SetBackingIcon(Texture iconTexture)
+        {
+            if (backingIcon == null)
+                return;
+
+            backingIcon.texture = iconTexture;
         }
 
         public void UpdateDragBeginUI()

@@ -9,7 +9,7 @@ namespace InventorySystem
         [SerializeField] private GameObject inventoryPrefab;
         [SerializeField] private GameObject inventoryContainer;
 
-        [SerializeField] private BaseInventoryUI inventoryUI;
+        [SerializeField] public BaseInventoryUI inventoryUI;
 
         public List<BaseInventory> inventories;
 

@@ -11,7 +11,7 @@ namespace InventorySystem
         public BaseInventory ActiveInventory { get; private set; } = null;
         public InventorySlotUI[] SlotsUI { get; private set; } = null;
 
-        public void ShowInventory(BaseInventory baseInventory)
+        public virtual void ShowInventory(BaseInventory baseInventory)
         {
             if (ActiveInventory == baseInventory)
                 return;
@@ -34,9 +34,6 @@ namespace InventorySystem
 
         public void HideInventory()
         {
-            if (ActiveInventory == null)
-                return;
-
             ClearSlots();
             ActiveInventory = null;
             gameObject.SetActive(false);

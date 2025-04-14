@@ -1,7 +1,5 @@
 using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace InventorySystem
 {
@@ -25,13 +23,18 @@ namespace InventorySystem
                 Slots[i] = new InventorySlot(this);
             }
 
-            if (inventoryUI != null && inventoryUI.gameObject.activeSelf)
-                inventoryUI.ShowInventory(this);
+            ShowOnAwake();
         }
 
-        public void Initialize(BaseInventoryUI inventoryUI)
+        public virtual void Initialize(BaseInventoryUI inventoryUI)
         {
             this.inventoryUI = inventoryUI;
+        }
+
+        public virtual void ShowOnAwake()
+        {
+            if (inventoryUI != null && inventoryUI.gameObject.activeSelf)
+                inventoryUI.ShowInventory(this);
         }
 
         public int AddItem(BaseItem baseItem, int quantity)
@@ -138,5 +141,10 @@ namespace InventorySystem
                 .Where(slot => slot.ContainsItem() && slot.inventoryItem.baseItem.id == baseItem.id)
                 .Sum(slot => slot.inventoryItem.quantity);
         }
+    }
+
+    public abstract class DumbBase<T> : MonoBehaviour
+    {
+        public T inventoryUI;
     }
 }

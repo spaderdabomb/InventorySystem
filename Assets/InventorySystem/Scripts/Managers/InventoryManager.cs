@@ -15,6 +15,8 @@ namespace InventorySystem
         public ChestManager chestManager;
         public ShopManager shopManager;
 
+        public ItemTooltip itemTooltip;
+
         public AudioSource audioSource;
         public InventoryInput inventoryInput;
 
@@ -71,6 +73,35 @@ namespace InventorySystem
             }
 
             interactable.SplitItem(CurrentHoverSlot.InventorySlot);
+        }
+
+        public void BuyItem(BaseInventory fromInventory, BaseInventory toInventory)
+        {
+            if (fromInventory == null ||
+                toInventory == null ||
+                !fromInventory.TryGetComponent(out SelectableComponent selectable))
+            {
+                Debug.LogWarning($"{fromInventory} does not have a selectable component - cannot buy item");
+                return;
+            }
+
+            BaseItem boughtItem = fromInventory.Slots[selectable.SelectedIndex].inventoryItem.baseItem;
+            fromInventory.RemoveItem(boughtItem, 1);
+            toInventory.AddItem(boughtItem, 1);
+        }
+
+        public void SellItem(BaseInventory fromInventory, BaseInventory toInventory)
+        {
+            if (fromInventory == null ||
+                toInventory == null ||
+                !toInventory.TryGetComponent(out SelectableComponent selectable))
+            {
+                Debug.LogWarning($"{toInventory} does not have a selectable component - cannot sell item");
+                return;
+            }
+
+            BaseItem soldItem = toInventory.Slots[selectable.SelectedIndex].inventoryItem.baseItem;
+            toInventory.RemoveItem(soldItem, 1);
         }
     }
 }

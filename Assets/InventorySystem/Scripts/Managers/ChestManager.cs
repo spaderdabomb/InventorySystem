@@ -9,7 +9,7 @@ namespace InventorySystem
         [SerializeField] private GameObject chestInventoryPrefab;
         [SerializeField] private GameObject chestContainer;
 
-        [SerializeField] private BaseInventoryUI chestUI;
+        [SerializeField] public BaseInventoryUI chestUI;
 
         public List<BaseInventory> chestInventories;
 

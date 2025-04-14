@@ -10,6 +10,8 @@ namespace InventorySystem
         public string displayName = string.Empty;
         public string description = string.Empty;
         public int maxStack = 50;
+        public int sellPrice = 1;
+        public ItemType itemType = ItemType.None;
 
         public Sprite icon;
 
@@ -17,6 +19,16 @@ namespace InventorySystem
         {
             id = Guid.TryParse(id, out _) ? id : Guid.NewGuid().ToString();
         }
+    }
+
+    public enum ItemType
+    {
+        None = 0,
+        Feet = 1,
+        Hands = 2,
+        Head = 3,
+        Body = 4,
+        Legs = 5,
     }
 
 }

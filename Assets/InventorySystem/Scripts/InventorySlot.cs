@@ -6,6 +6,7 @@ namespace InventorySystem
     public class InventorySlot
     {
         public InventoryItem inventoryItem = null;
+        public ItemType RequiredItemType { get; private set; } = ItemType.None;
         public BaseInventory ParentInventory { get; private set; }
 
         public InventorySlot(BaseInventory  parentInventory)
@@ -37,6 +38,11 @@ namespace InventorySystem
         public bool ContainsItem()
         {
             return inventoryItem != null;
+        }
+
+        public void SetItemType(ItemType itemType)
+        {
+            RequiredItemType = itemType;
         }
     }
 }

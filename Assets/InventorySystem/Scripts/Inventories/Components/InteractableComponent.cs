@@ -11,9 +11,15 @@ namespace InventorySystem
         {
             baseInventory = GetComponent<BaseInventory>();
         }
+
+        public virtual bool CanMoveItem(InventorySlot fromSlot, InventorySlot toSlot)
+        {
+            return fromSlot.inventoryItem != null;
+        }
+
         public void MoveItem(InventorySlot fromSlot, InventorySlot toSlot)
         {
-            if (fromSlot.inventoryItem == null)
+            if (!CanMoveItem(fromSlot, toSlot))
                 return;
 
             InventoryItem movedItem = fromSlot.inventoryItem;
